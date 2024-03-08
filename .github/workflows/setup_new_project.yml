@@ -40,8 +40,9 @@ jobs:
         run: |
           git config --global user.email "you@example.com"
           git config --global user.name "GitHub Actions"
-          git config --global http.https://github.com/.extraheader "AUTHORIZATION: basic x-access-token:${{ secrets.ACTION_PAT }}"
-          git remote set-url origin https://github.com/Romazd/${{ github.event.inputs.new_project_name }}.git
+          # Note: Removing the explicit setting of an extra header to avoid duplication.
+          git remote set-url origin https://x-access-token:${{ secrets.ACTION_PAT }}@github.com/Romazd/${{ github.event.inputs.new_project_name }}.git
           git branch -M main
           git push -u origin main
+        
         
