@@ -38,7 +38,7 @@ jobs:
       
       - name: Push to the new repository
         run: |
-          git remote set-url origin https://github.com/YourOrgOrUsername/${{ github.event.inputs.new_project_name }}.git
+          git remote set-url origin https://github.com/Romazd/${{ github.event.inputs.new_project_name }}.git
           git branch -M main
           git push -u origin main
         env:
