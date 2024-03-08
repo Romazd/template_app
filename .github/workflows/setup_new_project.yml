@@ -1,0 +1,34 @@
+name: Setup New Project From Template
+
+on:
+  workflow_dispatch:
+    inputs:
+      new_project_name:
+        description: 'New Project Name'
+        required: true
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.0' # Adjust as needed
+
+    - name: Run renaming script
+      run: ruby rename_rails_app.rb ${{ github.event.inputs.new_project_name }}
+      env:
+        RAILS_ENV: development
+
+    - name: Commit changes
+      run: |
+        git config --global user.email "you@example.com"
+        git config --global user.name "GitHub Actions"
+        git add -A
+        git commit -m "Renamed Rails application to ${{ github.event.inputs.new_project_name }}"
+        git push
