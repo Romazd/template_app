@@ -1,4 +1,4 @@
-name: Setup New Project From Template
+name: Clone and Setup Project
 
 on:
   workflow_dispatch:
@@ -7,31 +7,39 @@ on:
         description: 'New Project Name'
         required: true
 
-permissions: 
-  contents: write
-
 jobs:
-  setup:
+  clone_and_setup:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout template repository
+        uses: actions/checkout@v4
+        with:
+          repository: 'Romazd/template_app'
+          ref: 'main'
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.3'
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
 
-    - name: Run renaming script
-      run: ruby rename_rails_app.rb ${{ github.event.inputs.new_project_name }}
-      env:
-        RAILS_ENV: development
+      - name: Run renaming script
+        run: ruby rename_rails_app.rb ${{ github.event.inputs.new_project_name }}
+        env:
+          RAILS_ENV: development
 
-    - name: Commit changes
-      run: |
-        git config --global user.email "actions@github.com"
-        git config --global user.name "GitHub Actions"
-        git add -A
-        git commit -m "Renamed Rails application to ${{ github.event.inputs.new_project_name }}" || echo "No changes to commit"
-        git push --set-upstream origin HEAD:main
+      - name: Create a new repository
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -d '{"name":"${{ github.event.inputs.new_project_name }}", "auto_init": false}' \
+            https://api.github.com/orgs/Romazd/repos
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Push to the new repository
+        run: |
+          git remote set-url origin https://github.com/YourOrgOrUsername/${{ github.event.inputs.new_project_name }}.git
+          git branch -M main
+          git push -u origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
