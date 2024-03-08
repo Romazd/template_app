@@ -5,7 +5,7 @@ APP_NAME = ARGV[0]
 raise ArgumentError, 'You must provide a new application name' if APP_NAME.nil? || APP_NAME.empty?
 
 def gsub_file(file, old_str, new_str)
-  return unless File.exist?(file) # Skip files that do not exist
+  return unless File.exist?(file)
   
   text = File.read(file)
   new_contents = text.gsub(/#{old_str}/, new_str)
@@ -26,7 +26,6 @@ files_to_rename.each do |file|
   gsub_file(file, /TemplateApp/, APP_NAME)
 end
 
-# Additional logic for renaming the module in main application file, if necessary
 gsub_file('config/application.rb', /module TemplateApp/, "module #{APP_NAME.split('_').collect(&:capitalize).join}")
 
 puts "Application has been renamed to #{APP_NAME}"

@@ -25,10 +25,15 @@ jobs:
       env:
         RAILS_ENV: development
 
-    - name: Commit changes
+    - name: Configure git with GitHub Actions user
       run: |
         git config --global user.email "you@example.com"
         git config --global user.name "GitHub Actions"
+
+    - name: Commit changes
+      run: |
         git add -A
-        git commit -m "Renamed Rails application to ${{ github.event.inputs.new_project_name }}"
-        git push
+        git commit -m "Renamed Rails application to ${{ github.event.inputs.new_project_name }}" || echo "No changes to commit"
+        git push --set-upstream origin HEAD:main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
