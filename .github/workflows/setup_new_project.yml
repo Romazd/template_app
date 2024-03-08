@@ -13,12 +13,12 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.0' # Adjust as needed
+        ruby-version: '3.3'
 
     - name: Run renaming script
       run: ruby rename_rails_app.rb ${{ github.event.inputs.new_project_name }}
