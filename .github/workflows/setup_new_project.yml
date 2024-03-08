@@ -38,8 +38,8 @@ jobs:
 
       - name: Push to the new repository
         run: |
-          git remote set-url origin https://github.com/Romazd/${{ github.event.inputs.new_project_name }}.git
+          git config --global user.email "you@example.com"
+          git config --global user.name "GitHub Actions"
+          git remote set-url origin https://x-access-token:${{ secrets.ACTION_PAT }}@github.com/Romazd/${{ github.event.inputs.new_project_name }}.git
           git branch -M main
           git push -u origin main
-        env:
-          ACTION_PAT: ${{ secrets.GITHUB_TOKEN }}
