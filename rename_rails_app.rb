@@ -27,6 +27,6 @@ files_to_rename.each do |file|
 end
 
 # Additional logic for renaming the module in main application file, if necessary
-gsub_file('config/application.rb', /module TemplateApp/, "module #{APP_NAME.camelize}")
+gsub_file('config/application.rb', /module TemplateApp/, "module #{APP_NAME.split('_').collect(&:capitalize).join}")
 
 puts "Application has been renamed to #{APP_NAME}"
