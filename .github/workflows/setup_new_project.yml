@@ -30,16 +30,16 @@ jobs:
       - name: Create a new repository
         run: |
           curl -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: token ${{ secrets.ACTION_PAT }}" \
             -d '{"name":"${{ github.event.inputs.new_project_name }}", "auto_init": false}' \
-            https://api.github.com/orgs/Romazd/repos
+            https://api.github.com/user/repos
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+          ACTION_PAT: ${{ secrets.ACTION_PAT }}
+
       - name: Push to the new repository
         run: |
           git remote set-url origin https://github.com/Romazd/${{ github.event.inputs.new_project_name }}.git
           git branch -M main
           git push -u origin main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTION_PAT: ${{ secrets.ACTION_PAT }}
