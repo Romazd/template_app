@@ -42,4 +42,4 @@ jobs:
           git branch -M main
           git push -u origin main
         env:
-          ACTION_PAT: ${{ secrets.ACTION_PAT }}
+          ACTION_PAT: ${{ secrets.GITHUB_TOKEN }}
